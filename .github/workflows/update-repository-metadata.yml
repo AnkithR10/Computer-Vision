@@ -1,0 +1,43 @@
+name: Update repository metadata
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-metadata:
+    # Avoid a second run after this workflow commits a regenerated README.
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Regenerate README and description
+        shell: pwsh
+        run: ./scripts/Update-RepoMetadata.ps1
+
+      - name: Commit regenerated README
+        run: |
+          if git diff --quiet -- README.md; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: update repository README"
+          git push
+
+      - name: Update GitHub repository description
+        env:
+          GH_TOKEN: ${{ secrets.REPO_METADATA_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "REPO_METADATA_TOKEN is not configured; skipping description update."
+            exit 0
+          fi
+          gh api --method PATCH "repos/$GITHUB_REPOSITORY" \
+            -f description="$(tr -d '\n' < .github/repository-description.txt)"
