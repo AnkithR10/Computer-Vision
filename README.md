@@ -10,7 +10,7 @@ MCA Semester 3 Computer Vision laboratory work, including Jupyter notebooks, res
 | Lab 2 | Jupyter notebook and output document |
 | Lab 3 | Jupyter notebook and output document |
 | Lab 4 | Jupyter notebook and output document |
-| Lab 5 | Jupyter notebook |
+| Lab 5 | Jupyter notebook and output document |
 
 ## Getting started
 
