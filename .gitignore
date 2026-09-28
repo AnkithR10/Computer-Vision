@@ -33,3 +33,6 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
+
+# Local assignment handout
+Assignments/Assignment on modules.pdf
